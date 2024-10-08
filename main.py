@@ -6,6 +6,7 @@ import platform
 from victory import quiz_game
 from bank import bank_account
 
+
 # Функция для создания папки
 def create_folder(work_dir):
     folder_name = input("Введите название папки: ")
@@ -17,6 +18,7 @@ def create_folder(work_dir):
         print(f"Папка '{folder_name}' уже существует.\n")
     except Exception as e:
         print(f"Ошибка при создании папки: {e}\n")
+
 
 # Функция для удаления файла/папки
 def delete_item(work_dir):
@@ -34,6 +36,7 @@ def delete_item(work_dir):
             print(f"Папка '{item_name}' успешно удалена.\n")
     except Exception as e:
         print(f"Ошибка при удалении: {e}\n")
+
 
 # Функция для копирования файла/папки
 def copy_item(work_dir):
@@ -56,6 +59,7 @@ def copy_item(work_dir):
     except Exception as e:
         print(f"Ошибка при копировании: {e}\n")
 
+
 # Функция для просмотра содержимого рабочей директории
 def view_contents(work_dir):
     items = os.listdir(work_dir)
@@ -66,6 +70,7 @@ def view_contents(work_dir):
         for item in items:
             print(f"- {item}")
         print()
+
 
 # Функция для просмотра только папок
 def view_folders(work_dir):
@@ -79,6 +84,7 @@ def view_folders(work_dir):
             print(f"- {folder}")
         print()
 
+
 # Функция для просмотра только файлов
 def view_files(work_dir):
     items = os.listdir(work_dir)
@@ -91,6 +97,7 @@ def view_files(work_dir):
             print(f"- {file}")
         print()
 
+
 # Функция для просмотра информации об операционной системе
 def os_info():
     print("Информация об операционной системе:")
@@ -98,9 +105,11 @@ def os_info():
     print(f"Версия: {platform.version()}")
     print(f"Архитектура: {platform.machine()}\n")
 
+
 # Функция для отображения информации о создателе программы
 def program_creator():
     print("Создатель консольного файлового менеджера - Кульков Сергей.\n")
+
 
 # Функция для смены рабочей директории
 def change_working_directory():
@@ -115,6 +124,27 @@ def change_working_directory():
     else:
         print("Указанная директория не существует.\n")
     return None
+
+
+# Новое: Функция для сохранения содержимого рабочей директории в файл
+def save_directory_contents(work_dir):
+    """
+    Сохраняет содержимое рабочей директории в файл 'listdir.txt'.
+    Сначала записывает все файлы, затем все папки.
+    Если файл уже существует, он будет пересоздан.
+    """
+    try:
+        files = [item for item in os.listdir(work_dir) if os.path.isfile(os.path.join(work_dir, item))]
+        dirs = [item for item in os.listdir(work_dir) if os.path.isdir(os.path.join(work_dir, item))]
+
+        with open(os.path.join(work_dir, "listdir.txt"), "w", encoding="utf-8") as f:
+            f.write("files: " + ", ".join(files) + "\n")
+            f.write("dirs: " + ", ".join(dirs) + "\n")
+
+        print("Содержимое рабочей директории успешно сохранено в файл 'listdir.txt'.\n")
+    except Exception as e:
+        print(f"Ошибка при сохранении содержимого директории: {e}\n")
+
 
 # Основная функция меню
 def main():
@@ -133,8 +163,10 @@ def main():
         print("9. Играть в викторину")
         print("10. Мой банковский счет")
         print("11. Смена рабочей директории")
-        print("12. Выход")
-        choice = input("Выберите пункт меню (1-12): ")
+        print("12. Сохранить содержимое рабочей директории в файл")  # Новое
+        print("13. Выход")  # Номер изменился с 12 на 13
+
+        choice = input("Выберите пункт меню (1-13): ")
 
         if choice == '1':
             create_folder(work_dir)
@@ -161,10 +193,13 @@ def main():
             if new_dir:
                 work_dir = new_dir
         elif choice == '12':
+            save_directory_contents(work_dir)  # Ново12е
+        elif choice == '13':
             print("Выход из программы.")
             break
         else:
-            print("Неверный выбор. Пожалуйста, выберите число от 1 до 12.\n")
+            print("Неверный выбор. Пожалуйста, выберите число от 1 до 13.\n")
+
 
 if __name__ == "__main__":
     main()
